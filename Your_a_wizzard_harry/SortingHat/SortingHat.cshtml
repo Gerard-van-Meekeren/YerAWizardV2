@@ -1,11 +1,18 @@
 ﻿@{
-    Page.Title = "Title goes here";
-    //scholen
+    string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\Harry_Potter.mdf;Integrated Security=True";
+
+    string provider = "System.Data.SqlClient";
+
+    Database db = Database.OpenConnectionString(connectionString, provider);
+
+    //scholen en het punten dat ze hebben aan het einde van de quize
     int gryffindorP = 0, hufflepuffP = 0, ravenclawP = 0, slytherinP = 0, questionindex = 1;
-    List<string> houses = new List<string> { "griffindor", "hufflepuff", "ravenclaw", "slytherin" };
+    List<string> houses = new List<string> { "Gryffindor", "Hufflepuff", "Ravenclaw", "	Slytherin" };
     string winninghouse = "";
+    int house_Id = 0;
     int points = 0;
     Boolean win = false;
+
     //kijkt wat de antwoorden van de vragen zijn 
     for (int i = 0; i < 10; i++)
     {
@@ -37,16 +44,16 @@
 
         switch (house)
         {
-            case "griffindor":
+            case "Gryffindor":
                 points = gryffindorP;
                 break;
-            case "hufflepuff":
+            case "Hufflepuff":
                 points = hufflepuffP;
                 break;
-            case "ravenclaw":
+            case "Ravenclaw":
                 points = ravenclawP;
                 break;
-            case "slytherin":
+            case "Slytherin":
                 points = slytherinP;
                 break;
         }
@@ -73,8 +80,13 @@
 
     }
 
+    //haalt het House_Id op 
+    string SearchHouse = "SELECT House_Id FROM House WHERE House_name = @0";
+    var HouseIdd = db.QueryValue(SearchHouse, winninghouse);
 
-
+    //voeg gebruiker toe aan house en geef user house
+    string AddHouse = "UPDATE Profiel  SET House_House_ID  = @0 WHERE Username = @1";
+    db.Execute(AddHouse,house_Id , WebSecurity.CurrentUserName);
 }
 
 <div>
