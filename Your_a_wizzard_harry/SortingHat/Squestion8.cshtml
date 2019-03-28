@@ -1,0 +1,23 @@
+﻿@{
+    Page.Title = "Title goes here";
+    //Layout = "Your Layout Page goes here";
+}
+
+<div>
+    <form method="post" action="~/SortingHat/Squestion9.cshtml">
+        <div>Vraag 8: lalalalalala </div>
+        <input type="radio" name="Q8" value="griffindor" />antwoord 1<br />
+        <input type="radio" name="Q8" value="hufflepuff" /> antwoord 2<br />
+        <input type="radio" name="Q8" value="ravenclaw" /> antwoord 3<br />
+        <input type="radio" name="Q8" value="slytherin" /> antwoord 4<br />
+        <input type="submit" value="Question 9" />
+        @Html.Hidden("Q1", Request["Q1"])
+        @Html.Hidden("Q2", Request["Q2"])
+        @Html.Hidden("Q3", Request["Q3"])
+        @Html.Hidden("Q4", Request["Q4"])
+        @Html.Hidden("Q5", Request["Q5"])
+        @Html.Hidden("Q6", Request["Q6"])
+        @Html.Hidden("Q7", Request["Q7"])
+
+    </form>
+</div>
