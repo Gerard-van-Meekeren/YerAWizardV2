@@ -4,6 +4,7 @@
     var ConfirmPassword = "";
     var Email = "";
     var ConfirmEmail = "";
+    var Rank = "Student";
 
     //Add some kind of error messege if the forms are not filled in
     if (IsPost)
@@ -18,12 +19,12 @@
         {
             if(Email == ConfirmEmail)
             {
-                string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\Database.mdf;Integrated Security=True";
+                string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\Harry_Potter.mdf;Integrated Security=True";
                 string provider = "System.Data.SqlClient";
                 Database db = Database.OpenConnectionString(connectionString, provider);
 
-                var InsertUser = "INSERT INTO [User1] (Username, Password, Email) Values (@0, @1, @2)";
-                db.Execute(InsertUser, Username, Password, Email);
+                var InsertUser = "INSERT INTO [Profiel] (Username, Password, Email, Rank) Values (@0, @1, @2, @3)";
+                db.Execute(InsertUser, Username, Password, Email, Rank);
                 Response.Redirect("~/login.cshtml");
             }
             else
