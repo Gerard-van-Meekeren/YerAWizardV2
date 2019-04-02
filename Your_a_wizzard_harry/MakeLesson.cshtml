@@ -1,0 +1,93 @@
+﻿@{
+    string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\Harry_Potter.mdf;Integrated Security=True";
+
+    string provider = "System.Data.SqlClient";
+
+    Database db = Database.OpenConnectionString(connectionString, provider);
+
+    if (!Request.QueryString["deleteId"].IsEmpty() && Request.QueryString["deleteId"].IsInt())
+    {
+        int deleteId = Request.QueryString["deleteId"].AsInt();
+        string delete = "DELETE FROM Lesson WHERE Lesson_Id = @0";
+        db.Execute(delete, deleteId );
+    }
+
+    if (!Request.QueryString["Lesson_Id"].IsEmpty() && Request.QueryString["Lesson_Id"].IsInt())
+    {
+        int lesson_Id = Request.QueryString["Lesson_Id"].AsInt();
+
+        string getactivelesson = "UPDATE Lesson SET Selected_Lesson = @0 WHERE Selected_Lesson = @1";
+        var updatelessons = db.Execute(getactivelesson, 0, 1);
+        string updatelesson = "UPDATE Lesson SET Selected_Lesson = @0 WHERE Lesson_Id = @1 ";
+        var updatelesson2 = db.Execute(updatelesson, 1, lesson_Id);
+    }
+
+    if (IsPost)
+    {
+        string teacher = Request.Form["teacher"];
+        string titel = Request.Form["titel"];
+        string content = Request.Form["content"];
+        int isactive = Request.Form["Isactive"].AsInt();
+        if(isactive == 1)
+        {
+            string getactivelesson = "UPDATE Lesson SET Selected_Lesson = @0 WHERE Selected_Lesson = @1";
+            var updatelessons = db.Execute(getactivelesson, 0, 1);
+        }
+        else
+        {
+            isactive = 0;
+        }
+        string pushlesson = "INSERT INTO Lesson (lesson_name , Teacher , Lesson_Material , Selected_Lesson) VALUES (@0 , @1 , @2 , @3)";
+        var insertinto = db.Execute(pushlesson, titel, teacher , content, isactive);
+    }
+    string GetOtherTitels = "SELECT Lesson_name, Teacher , Lesson_Id ,Selected_Lesson  FROM Lesson ";
+    var rows = db.Query(GetOtherTitels);
+}
+
+<div>
+    <form method="post">
+        <div>
+            <label>leraar </label>
+            <br />
+            <input type="text" name="teacher" />
+
+        </div>
+        <div>
+            <label>les titel</label>
+            <br />
+            <input type="text" name="titel" />
+
+        </div>   
+        <div>
+            <label>content</label>
+            <br />
+            <input type="text" name="content" />
+
+        </div>
+        <div>
+            <label>maak dit de active les</label>
+            <input type="checkbox" name="Isactive" value="1"><br>
+        </div>
+        <br />
+        <button type="submit">Add</button>
+
+    </form>
+
+</div>
+<div>
+    <ul>
+        @foreach (var row in rows)
+        {
+
+            if (row.Selected_Lesson == true)
+            {
+                <li><a href="~/Lessonprefew.cshtml?Lesson_Id=@row.Lesson_Id">@row.Lesson_name</a> --- @row.Teacher Is active </li>
+            }
+            else
+            {
+                <li><a href="~/Lessonprefew.cshtml?Lesson_Id=@row.Lesson_Id">@row.Lesson_name</a> --- @row.Teacher <a href="~/MakeLesson.cshtml?Lesson_Id=@row.Lesson_Id">maak deze les actief</a> --- <a href="~/MakeLesson.cshtml?deleteId=@row.Lesson_Id"> verwijder deze les</a> </li>
+            }
+
+        }
+    </ul>
+</div>

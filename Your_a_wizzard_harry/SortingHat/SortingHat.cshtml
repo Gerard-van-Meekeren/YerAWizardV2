@@ -82,7 +82,7 @@
 
     //haalt het House_Id op 
     string SearchHouse = "SELECT House_Id FROM House WHERE House_name = @0";
-    var HouseIdd = db.QueryValue(SearchHouse, winninghouse);
+    int HouseIdd = db.QueryValue(SearchHouse, winninghouse);
 
     //voeg gebruiker toe aan house en geef user house
     string AddHouse = "UPDATE Profiel  SET House_House_ID  = @0 WHERE Username = @1";
