@@ -1,11 +1,11 @@
-﻿@*@{
+﻿@{
 
     string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\Harry_Potter.mdf;Integrated Security=True";
 
     string provider = "System.Data.SqlClient";
 
     Database db = Database.OpenConnectionString(connectionString, provider);
-    string Getawnsers;
+    string Getawnser;
     string GetquestionId;
     string Getquestion;
     string Getexamid;
@@ -17,7 +17,7 @@
     string selectexam = "SELECT exam_name From Exam WHERE Lesson_Id = @0";
     var GetExam = db.QueryValue(selectexam, lesson_Id);
 
-    void GetQuestions()
+    private string Getquestions(int questionindex)
     {
         Getexamid = "SELECT exam_Id form exam where Lesson_Id = @0";
         Exam_Id = db.QueryValue(Getexamid, lesson_Id);
@@ -26,18 +26,28 @@
         question = db.QueryValue(Getquestion, Exam_Id , counter);
         questionId = db.QueryValue(GetquestionId, Exam_Id, counter);
 
+        return question;
+
 
     }
-    void GetAwnsesrs()
+    private string GetAwnsesrs(int awnserindex)
     {
-        Getawnsers = "SELECT answer FROM answer_Id WHERE Question_Id = @0";
-        var awnsers = db.Query(Getawnsers, questionId);
+        Getawnser = "SELECT answer FROM answer_Id WHERE Question_Id = @0 && index = @1 ";
+        var awnser = db.QueryValue(Getawnser, questionId, awnserindex);
+
+        return awnser;
     }
 }
 
 <h1>@GetExam</h1>
 <ul>
-    
-    @GetQuestions;
-    <li></li>
-</ul>*@
+        @Getquestions(1);
+        @for (int i = 0; i < 4; i++)
+        {
+            <h1>@GetAwnsesrs(i)</h1>
+                @i=+1;
+            <br />
+        }
+
+
+</ul>
